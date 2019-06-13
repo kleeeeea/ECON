@@ -1,42 +1,35 @@
-# concept relevance
+# ECON
 
 
-## Notes
-
-This software requires [AutoPhrase](https://github.com/shangjingbo1226/AutoPhrase) to extract domain keyphrases. Please refer to AutoPhrase documentation for installation and usage.
-
-## Requirements
+    ## Requirements
 
 We will take Ubuntu for example.
 
-* python 2.7
+* python 3.6
 ```
 $ sudo apt-get install python
 ```
 * other python packages
 ```
-$ sudo pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
-## Build
-Build AutoPhrase by Makefile in the terminal.
-```
-$ cd SegPhrase
-$ make
-```
+## Dependency
+
+Please install ``````
 
 ## Run
 First, to fit our model to a corpus, run
 ```
-$ bash ./train.sh 
+$ bash ./train.sh
 ```
-and specify the input/output by changing the following variables at the begining of the script
+and specify the input/output by changing the following variables at the beginning of the script
 * ```TEXT```: the input text file
 * ```MODEL```: the path to store the model
 
 Then, query a specific set of documents, run
 ```
-$ bash ./test.sh 
+$ bash ./test.sh
 ```
 and specify the input/output by changing the following variables at the begining of the script
 * ```TEXT```: the input text file
@@ -45,7 +38,7 @@ and specify the input/output by changing the following variables at the begining
 * ```SEGGED_TEXT_categorized```: the final output
 
 ## Input Format
-* The input files specified by ```TEXT``` for both ```train.sh``` and ```test.sh``` should be one document per line. 
+* The input files specified by ```TEXT``` for both ```train.sh``` and ```test.sh``` should be one document per line.
 * The input file ```CATEGORY_SEEDCONCEPTS``` should have each line following the format ```[category name]\t[concept1],[concept2],[concept3]...```, and can contain one or more lines.
 
 ## Output Format
@@ -53,7 +46,7 @@ The query relevance output, as specified by the `SEGGED_TEXT_categorized` in the
 
 
 ## Hyper-Parameters
-The running parameters are located in `conf.d` folder, including `autoPhrase.conf` and `pyConfig.conf`. 
+The running parameters are located in `conf.d` folder, including `autoPhrase.conf` and `pyConfig.conf`.
 
 `autoPhrase.conf` contains the parameters for concept extraction and segmentation.
 
