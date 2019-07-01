@@ -16,6 +16,8 @@ python -m spacy download en_core_web_sm
 
 python candidate_generation/to_json/nltk_extract.py $RAW_TEXT
 python candidate_generation/to_json/spacy_extract.py $RAW_TEXT
+python candidate_generation/to_json/autophrase.py $RAW_TEXT
+python candidate_generation/to_json/dbpedia_extract.py $RAW_TEXT
 
 python candidate_generation/to_term_list/extract.py $RAW_TEXT textrank
 python candidate_generation/to_term_list/extract.py $RAW_TEXT rake
