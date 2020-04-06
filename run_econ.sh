@@ -9,6 +9,7 @@ export DBPEDIA_PATH="$HOME/bin/spotlight-english"
 docker run -i -p 2222:80 dbpedia/spotlight-english spotlight.sh
 
 # Out-of-the-box: download best-matching default model and create shortcut link
+unalias python
 python -m spacy download en
 python -m spacy download en_core_web_sm
 

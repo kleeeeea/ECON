@@ -1,13 +1,19 @@
-import sys
 import argparse
-from gensim.models import word2vec, Word2Vec
+from gensim.models import Word2Vec
 import numpy as np
 import re
 import pickle
 import logging
 from econ.embedding import to_concept_natural, re_concept_tagged, to_concept_gensim, to_concept_natural_lower
-from util.common import removeNonLetter, getLogger
+import argparse
+import logging
+import pickle
+import re
 
+import numpy as np
+from gensim.models import Word2Vec
+
+from econ.embedding import to_concept_natural, re_concept_tagged, to_concept_gensim, to_concept_natural_lower
 
 parser = argparse.ArgumentParser("")
 parser.add_argument('arg1', nargs='?', default="cs", help="1st Positional arg")

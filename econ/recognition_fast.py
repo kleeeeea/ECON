@@ -22,7 +22,7 @@ IS_DOMINATED_COEFF = -20
 
 
 parser = argparse.ArgumentParser("")
-parser.add_argument('arg1', nargs='?', default="cs", help="1st Positional arg")
+parser.add_argument('arg1', nargs='?', default="/Users/kli02/Workspace/ECON/sample_data/sample_text.txt", help="1st Positional arg")
 args = parser.parse_args()
 tokenized_text = args.arg1
 
@@ -43,7 +43,7 @@ concept_representation_path = tokenized_text + '_concept_representation.txt'
 model = Word2Vec.load(model_save_path)
 concept_list = [w for w in model.wv.index2word if re_concept_tagged.match(w)]
 
-concept_lowered2score = {}
+concept_lowered2score = defaultdict(lambda :1)
 concept_score_path = tokenized_text + '_score_list.bin'
 
 try:
@@ -51,7 +51,7 @@ try:
     concept2score = dict(zip(concept_list[:len(concept_score_list)], concept_score_list))
     concept_lowered2score = {c.lower(): max([s for c, s in c_s]) for c, c_s in
                              groupby(sorted(concept2score.items(), key=lambda t: t[0]), key=lambda t: t[0])}
-except FileNotFoundError as e:
+except Exception as e:
     pass
 
 
@@ -91,7 +91,7 @@ def getIsDominatedScore(sequence, superspan_sequence, model=model):
             #     import ipdb; ipdb.set_trace()
             covered_concepts = set()
             try:
-                c1overed_neighbor_word2sim = {covered_concept.lower(): sim for covered_concept, sim in model.most_similar(model.wv.index2word[vocab_lower[concept1].index], topn=TOPN, restrict_vocab=restrict_vocab, partition_only=True) if sim > BASIC_THRESHOLD and to_concept_natural_lower(concept) in to_concept_natural_lower(covered_concept)}
+                covered_neighbor_word2sim = {covered_concept.lower(): sim for covered_concept, sim in model.most_similar(model.wv.index2word[vocab_lower[concept1].index], topn=TOPN, restrict_vocab=restrict_vocab, partition_only=True) if sim > BASIC_THRESHOLD and to_concept_natural_lower(concept) in to_concept_natural_lower(covered_concept)}
                 for other_concept in getNormalizedTextualUnits(superspan):
                     if other_concept.lower() in covered_neighbor_word2sim:
                         covered_concepts.add(other_concept)
@@ -100,8 +100,6 @@ def getIsDominatedScore(sequence, superspan_sequence, model=model):
                 score += len(covered_concepts)
             except Exception as e:
                 continue
-
-
 
             # if len(covered_concepts) > 0:
             #     import ipdb; ipdb.set_trace()
@@ -202,4 +200,4 @@ def process_by_index(indexes=None):
             f.write(segmentation + '\n')
 
 if __name__ == '__main__':
-    process_by_index(range(5))
+    process_by_index([1])

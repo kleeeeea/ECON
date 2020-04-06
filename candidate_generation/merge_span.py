@@ -130,14 +130,15 @@ def remove_duplicate(x):
     occur = set()
     return_list = []
     for i in x:
-        if i == 0 or i not in occur:
+        if i == -1 or i not in occur:
             return_list.append(i)
             occur.add(i)
     return return_list
 
-# flag = [0, 1, 1, 0, 2, 3, 4, 5, 6, 7, 7,
-#         8, 9, 9, 10, 11, 11, 12, 12, 12, 12, 0]
-# remove_duplicate(flag)
+flag = [0, 1, 1, 0, 2, 3, 4, 5, 6, 7, 7,
+        8, 9, 9, 10, 11, 11, 12, 12, 12, 12, 0]
+print(f"{remove_duplicate(flag)}\n"
+      f"(remove_duplicate(flag))")
 
 
 # In[44]:
@@ -162,7 +163,7 @@ def generate_sequence(superspan_list, tokens):
     '''
         generate super span sequence
     '''
-    flag = [0]*len(tokens)
+    index_in_token2index_in_superspan_list = [-1]*len(tokens)
 
     sequence = []
     for i, superspan in enumerate(superspan_list):
@@ -170,21 +171,25 @@ def generate_sequence(superspan_list, tokens):
         ed = superspan['ed']
         for idx in range(st, ed):
             try:
-                flag[idx] = i
+                index_in_token2index_in_superspan_list[idx] = i
                 pass
             except Exception as e:
                 import ipdb
                 ipdb.set_trace()
                 raise e
 
-    flag = remove_duplicate(flag)
+    # index_in_token2index_in_superspan_list = remove_duplicate(index_in_token2index_in_superspan_list)
 
-    for idx, v in enumerate(flag):
-        if v == 0:
-            sequence.append({'tag': 'plain', 'text': tokens[idx], 'st': idx, 'ed': idx+1})
-        else:
-            superspan_list[v].update({'tag': 'superspan'})
-            sequence.append(superspan_list[v])
+    index_in_superspan_list_that_has_occurred = set()
+    for index_in_token, index_in_superspan_list in enumerate(index_in_token2index_in_superspan_list):
+        if index_in_superspan_list == -1:
+            # is plain text
+            sequence.append({'tag': 'plain', 'text': tokens[index_in_token], 'st': index_in_token, 'ed': index_in_token + 1})
+        elif index_in_superspan_list not in index_in_superspan_list_that_has_occurred:
+            sequence.append(superspan_list[index_in_superspan_list])
+            index_in_superspan_list_that_has_occurred.add(index_in_superspan_list)
+            superspan_list[index_in_superspan_list].update({'tag': 'superspan'})
+
     return sequence
 
 
@@ -264,7 +269,7 @@ def calc_phrase_freq(data, islower=True):
 
 def main():
     parser = argparse.ArgumentParser("")
-    parser.add_argument('arg1', nargs='?', default="cs", help="1st Positional arg")
+    parser.add_argument('arg1', nargs='?', default="/Users/kli02/Workspace/ECON/sample_data/sample_text.txt", help="1st Positional arg")
     args = parser.parse_args()
     tokenized_text = args.arg1
     outFile = tokenized_text + SUFFIX_SUPERSPANS
